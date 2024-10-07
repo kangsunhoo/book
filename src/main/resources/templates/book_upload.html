@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>책 등록</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+
+<!-- 헤더 및 사이드바 포함 -->
+<div th:replace="hnf/header :: header"></div>
+<div th:replace="hnf/aside :: aside"></div>
+
+<!-- 책 등록 폼 -->
+<div class="book_upload">
+  <h2>책 등록</h2>
+  <form action="/book_upload_proc" method="post" enctype="multipart/form-data"> <!-- POST 요청과 파일 업로드를 지원 -->
+    <table>
+      <tr>
+        <td>표지 등록</td>
+        <td><input type="file" name="sbookFile" required></td> <!-- 파일 업로드 필드 -->
+      </tr>
+      <tr>
+        <td>책 제목</td>
+        <td><input type="text" name="bookTitle" required></td> <!-- 책 제목 필드 -->
+      </tr>
+      <tr>
+        <td>저자</td>
+        <td><input type="text" name="bookAuthor" required></td> <!-- 저자 입력 필드 -->
+      </tr>
+      <tr>
+        <td>출판사</td>
+        <td><input type="text" name="bookCompany" required></td> <!-- 출판사 입력 필드 -->
+      </tr>
+      <tr>
+        <td>카테고리</td>
+        <td>
+          <select name="categoryid" required>
+            <option value="" disabled selected>카테고리 선택</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.categoryId}"
+                    th:text="${category.categoryName}"></option>
+          </select>
+
+        </td>
+      </tr>
+      <tr>
+        <td>책 내용</td>
+        <td><textarea name="bookContent" rows="5" required></textarea></td> <!-- 책 내용 필드 -->
+      </tr>
+    </table>
+    <button type="submit">책 등록</button> <!-- 제출 버튼 -->
+  </form>
+</div>
+
+<!-- 푸터 포함 -->
+<div th:replace="hnf/footer :: footer"></div>
+
+</body>
+</html>

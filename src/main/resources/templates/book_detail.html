@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>책 상세 정보</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+</head>
+<body>
+<div th:replace="hnf/header :: header"></div>
+<div th:replace="hnf/aside :: aside"></div>
+
+<div class="book-detail-container" style="margin-left:250px">
+    <div class="book-detail" style="margin-left:250px">
+        <!-- 책 이미지 -->
+        <img th:src="@{/uploads/{fileName}(fileName=${book.obookFile}, random=${#dates.format(new java.util.Date(), 'yyyyMMddHHmmss')})}" class="book-image" alt="Book Image" width="200"/>
+
+        <!-- 책 정보 -->
+        <div class="book-info">
+            <h2 th:text="${book.bookTitle}">책 제목</h2>
+            <p><strong>저자:</strong> <span th:text="${book.bookAuthor}">저자 이름</span></p>
+            <p><strong>출판사:</strong> <span th:text="${book.bookCompany}">출판사 이름</span></p>
+            <p><strong>카테고리:</strong> <span th:text="${book.categoryName}">카테고리</span></p>
+            <p><strong>등록 날짜:</strong> <span th:text="${formattedRegdate}">등록 날짜</span></p>
+            <p><strong>내용:</strong> <span th:text="${book.bookContent}">책 내용</span></p>
+        </div>
+    </div>
+    <!--댓글-->
+    <div class="review-form-container">
+        <h3>리뷰 작성</h3>
+        <form th:action="@{/reviews/new}" method="post">
+            <input type="hidden" name="bookId" th:value="${book.bookId}"/>
+            <input type="hidden" name="userid" th:value="${session.userid}"/> <!-- 세션에서 사용자 ID 가져오기 -->
+
+
+            <label for="review">리뷰 내용:</label>
+            <textarea id="review" name="review" rows="5" required></textarea>
+
+            <button type="submit">리뷰 제출</button>
+        </form>
+    </div>
+
+    <!-- 리뷰 목록 -->
+    <div class="review-list-container">
+        <h3>리뷰 목록</h3>
+
+        <div th:if="${reviews != null && reviews.size() == 0}">
+            <p>리뷰가 없습니다.</p>
+        </div>
+
+
+        <div th:each="review : ${reviews}">
+            <div class="review-item">
+                <p><strong th:text="${review.nickname}">닉네임</strong> <span th:text="${#dates.format(review.regdate, 'yyyy-MM-dd HH:mm')}">등록 날짜</span></p>
+                <p th:text="${review.review}">리뷰 내용</p>
+                <form th:action="@{/reviews/delete/{id}(id=${review.idx})}" method="post">
+                    <button type="submit">삭제</button>
+                </form>
+            </div>
+            <hr/>
+        </div>
+    </div>
+
+
+    <!-- 뒤로 가기 링크 -->
+    <a th:href="@{/book_list}" class="back-link">← 돌아가기</a>
+</div>
+
+<div th:replace="hnf/footer :: footer"></div>
+</body>
+</html>

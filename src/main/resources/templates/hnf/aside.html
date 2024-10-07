@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<aside class="aside">
+<DIV CLASS="aside_div">
+    <table>
+        <tr><td><a href="">게시판</a></td> </tr>
+        <tr><td><a href="">리뷰등록</a></td></tr>
+        <tr><td><a href="/book_list">도서모음</a></td></tr>
+        <tr th:if="${session.userid != null and session.role == '관리자'}">
+            <td><a href="/book_upload">책등록</a></td>
+        </tr>
+        <tr th:if="${session.userid != null and session.role == '관리자'}">
+            <td><a href="/member">회원리스트</a></td>
+        </tr>
+
+    </table>
+</DIV>
+</aside>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>북 목록</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <style>
+    .active {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    .book-image {
+        width: 50px; /* 이미지 크기 조절 */
+        height: auto; /* 비율 유지 */
+    }
+  </style>
+</head>
+<body>
+<div th:replace="hnf/header :: header"></div>
+<div th:replace="hnf/aside :: aside"></div>
+<div class="main-container">
+
+  <!-- 북 목록 테이블 -->
+  <table border="1" th:if="${allBooks != null}">
+    <tr>
+      <th>번호</th>
+      <th>이미지</th>
+      <th>책 제목</th>
+      <th>저자</th>
+      <th>출판사</th>
+      <th>카테고리</th>
+      <th>등록 날짜</th>
+      <th>삭제</th>
+    </tr>
+    <tr th:each="book: ${allBooks}">
+      <td th:text="${book.bookId}"></td>
+      <td>
+        <img th:src="@{/uploads/{fileName}(fileName=${book.obookFile}, random=${#dates.format(new java.util.Date(), 'yyyyMMddHHmmss')})}" class="book-image" alt="Book Image"/>
+
+      </td>
+      <td><a th:href="@{/book_detail(bookId=${book.bookId})}" th:text="${book.bookTitle}"></a></td>
+      <td th:text="${book.bookAuthor}"></td>
+      <td th:text="${book.bookCompany}"></td>
+      <td th:text="${book.category.categoryId}"></td>
+      <td th:text="${book.regdate}"></td>
+      <td><a th:href="@{/delBook(bookId=${book.bookId})}" th:text="삭제"></a></td>
+    </tr>
+
+  </table>
+
+  <!-- 페이지네이션 -->
+  <div th:if="${totalPages > 0}">
+    <span th:if="${currentPage > 0}">
+        <a th:href="@{/book_list(page=${currentPage - 1})}">이전</a>
+    </span>
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/book_list(page=${i})}"
+           th:text="${i + 1}" th:class="${i == currentPage} ? 'active' : ''"></a>
+    </span>
+    <span th:if="${currentPage + 1 < totalPages}">
+        <a th:href="@{/book_list(page=${currentPage + 1})}">다음</a>
+    </span>
+  </div>
+</div>
+<div th:replace="hnf/footer :: footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- 다음 주소 검색 API -->
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<body>
+<div th:replace="hnf/header :: header"></div>
+<div th:replace="hnf/aside :: aside"></div>
+<div class="join_proc">
+  <form method="post" action="/join_proc">
+    <table>
+      <h2>회원가입</h2>
+      <h5>가입을 통해 더 다양한 서비스를 만나보세요</h5>
+      <tbody>
+      <tr>
+       <td> <label for="userid">아이디</label></td>
+       <td> <input type="text" id="userid" name="userid" required>
+        <button type="button" onclick="sameCheck()">중복 확인</button>
+         <span>
+        <div id="useridError" style="color: red;"></div>
+        <div id="duplicateMessage" style="color: green;"></div>
+         </span></td>
+      </tr>
+      <tr>
+        <td>비밀번호</td>
+        <td><input type="password" id="pwd" name="pwd" required></td>
+      </tr>
+      <tr>
+        <td>비밀번호 확인</td>
+        <td>
+          <input type="password" id="pwd1" name="pwd1" required>
+          <button type="button" onclick="checkPassword()">확인</button>
+          <span id="passwordMessage" style="color: red;"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>닉네임</td>
+        <td><input type="text" id="nickname" name="nickname" required></td>
+      </tr>
+      <tr>
+        <td>이름</td>
+        <td>
+          <input type="text" name="name" id="name" placeholder="이름" required oninput="validateName()">
+          <div id="nameError" style="color: red;"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>나이</td>
+        <td><input type="number" id="age" name="age" required min="1" max="150"></td>
+      </tr>
+      <tr>
+        <td>전화번호</td>
+        <td><input type="text" id="phone" name="phone" required placeholder="전화번호"></td>
+      </tr>
+      <!-- 주소 입력 섹션 -->
+      <tr>
+      <td><label for="postcode">우편번호</label></td>
+     <td><input type="text" id="postcode" name="postcode" placeholder="우편번호" required readonly>
+      <button type="button" onclick="execDaumPostcode()">주소 검색</button> </td><!-- 주소 검색 버튼 추가 -->
+      </tr>
+      <tr>
+      <td><label for="address">주소</label></td>
+        <td><input type="text" id="address" name="address" placeholder="기본 주소" required readonly></td>
+      </tr>
+      <tr>
+        <td><label for="detailAddress">상세주소</label></td>
+      <td><input type="text" id="detailAddress" name="detailAddress" placeholder="상세 주소"></td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>
+          <input type="text" name="email" id="email" placeholder="이메일" required>@
+          <select name="domain" id="domain" onchange="updateEmail()">
+            <option value="">선택하세요</option>
+            <option value="naver.com">naver.com</option>
+            <option value="daum.net">daum.net</option>
+            <option value="gmail.com">gmail.com</option>
+          </select>
+          <input type="hidden" name="fullEmail" id="fullEmail">
+          <div id="emailError" style="color: red;"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  <br>
+    <input type="submit" value="회원가입">
+  </form>
+</div>
+<div th:replace="hnf/footer :: footer"></div>
+
+</body>
+<script>
+  function validateName() {
+      const name = document.getElementById("name").value;
+      const nameError = document.getElementById("nameError");
+      const regex = /^[가-힣]+$/; // 한글만
+      nameError.textContent = regex.test(name) ? "" : "이름은 한글만 입력 가능합니다.";
+  }
+
+  function updateEmail() {
+      const emailInput = document.getElementById("email").value;
+      const domainSelect = document.getElementById("domain").value;
+      const fullEmailInput = document.getElementById("fullEmail");
+
+      if (emailInput && domainSelect) {
+          fullEmailInput.value = emailInput + "@" + domainSelect;
+      } else {
+          fullEmailInput.value = ""; // 빈 값 처리
+      }
+  }
+
+function sameCheck() {
+    const userid = document.getElementById("userid").value;
+    const duplicateMessage = document.getElementById("duplicateMessage");
+
+    if (!userid) {
+        duplicateMessage.textContent = "아이디를 입력하세요.";
+        duplicateMessage.style.color = "red"; // 메시지 색상 설정
+        return;
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/IDCheck?userid=" + encodeURIComponent(userid), // URL 인코딩
+        success: function(res) {
+            console.log('AJAX 요청 성공:', res);
+            if (res.data) { // 서버의 응답 형식에 따라 변경
+                duplicateMessage.textContent = "이미 사용 중인 아이디입니다.";
+                duplicateMessage.style.color = "red"; // 중복일 경우 빨간색
+            } else {
+                duplicateMessage.textContent = "사용 가능한 아이디입니다.";
+                duplicateMessage.style.color = "green"; // 사용 가능일 경우 초록색
+            }
+        },
+        error: function(err) {
+            console.log('오류 발생:', err);
+            duplicateMessage.textContent = "서버와의 연결에 문제가 발생했습니다.";
+            duplicateMessage.style.color = "red"; // 에러 발생 시 빨간색
+        }
+    });
+}
+
+
+          // 카카오 주소 검색 API 실행
+    function execDaumPostcode() {
+      new daum.Postcode({
+        oncomplete: function(data) {
+          // 선택된 주소 정보를 해당 필드에 자동으로 입력
+          document.getElementById('postcode').value = data.zonecode; // 우편번호
+          document.getElementById('address').value = data.roadAddress || data.jibunAddress; // 도로명 또는 지번 주소
+          document.getElementById('detailAddress').focus(); // 상세 주소로 포커스 이동
+        }
+      }).open(); // 팝업창 열기
+    }
+
+  function checkPassword() {
+    const pwd = document.getElementById("pwd").value;
+    const pwd1 = document.getElementById("pwd1").value;
+    const passwordMessage = document.getElementById("passwordMessage");
+
+    if (pwd === "" || pwd1 === "") {
+        passwordMessage.textContent = "비밀번호를 입력하세요.";
+        return;
+    }
+
+    if (pwd === pwd1) {
+        passwordMessage.textContent = "비밀번호가 일치합니다.";
+        passwordMessage.style.color = "green"; // 일치할 경우 초록색
+    } else {
+        passwordMessage.textContent = "비밀번호가 일치하지 않습니다.";
+        passwordMessage.style.color = "red"; // 불일치할 경우 빨간색
+    }
+}
+
+</script>
+</html>

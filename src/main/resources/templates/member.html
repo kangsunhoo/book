@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>회원 목록</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <style>
+    .active {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+  </style>
+
+
+</head>
+<body>
+<div th:replace="hnf/header :: header"></div>
+<div th:replace="hnf/aside :: aside"></div>
+<div class="main-container">
+
+  <!-- 회원 목록 테이블 -->
+  <table border="1">
+    <tr>
+      <th>번호</th>
+      <th>아이디</th>
+      <th>이름</th>
+      <th>닉네임</th>
+      <th>나이</th>
+      <th>전화번호</th>
+      <th>우편번호</th>
+      <th>주소</th>
+      <th>상세 주소</th>
+      <th>이메일</th>
+      <th>가입날짜</th>
+      <th>역할</th>
+      <th>삭제</th>
+    </tr>
+    <tr th:each="member: ${all}">
+      <td th:text="${member.idx}"></td>
+      <td><a th:href="@{/modify(idx=${member.idx})}" th:text="${member.userid}"></a></td>
+      <td th:text="${member.name}"></td>
+      <td th:text="${member.nickname}"></td>
+      <td th:text="${member.age}"></td>
+      <td th:text="${member.phone}"></td>
+      <td th:text="${member.postcode}"></td>
+      <td th:text="${member.address}"></td>
+      <td th:text="${member.detailAddress}"></td>
+      <td th:text="${member.email}"></td>
+      <td th:text="${member.regdate}"></td>
+      <td th:text="${member.role}"></td>
+      <td><a th:href="@{/del(idx=${member.idx})}" th:text="삭제"></a></td>
+
+    </tr>
+  </table>
+
+
+  <!-- 페이지네이션 -->
+  <div th:if="${totalPages > 0}">
+    <span th:if="${currentPage > 0}">
+        <a th:href="@{/member(keyword=${keyword}, page=${currentPage - 1}, size=${all.size})}">이전</a>
+    </span>
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/member(keyword=${keyword}, page=${i}, size=${all.size})}"
+           th:text="${i + 1}" th:class="${i == currentPage} ? 'active' : ''"></a>
+    </span>
+    <span th:if="${currentPage + 1 < totalPages}">
+        <a th:href="@{/member(keyword=${keyword}, page=${currentPage + 1}, size=${all.size})}">다음</a>
+    </span>
+  </div>
+</div>
+<div th:replace="hnf/footer :: footer"></div>
+
+</body>
+</html>

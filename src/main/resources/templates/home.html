@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+<div th:replace="hnf/header :: header"></div>
+<div th:replace="hnf/aside :: aside"></div>
+
+<section>
+  <br>
+  <div class="new">
+    <div class="new-label">신작</div>
+    <div class="book-item" id="ch1">
+      <a href="book-details.html?bookId=1">
+        <img src="path/to/book-image1.jpg" alt="책 제목 1" class="book-image">
+        <h3 class="book-title">책 제목 1</h3>
+      </a>
+    </div>
+
+    <div class="book-item" id="ch2">
+      <a href="book-details.html?bookId=2">
+        <img src="path/to/book-image2.jpg" alt="책 제목 2" class="book-image">
+        <h3 class="book-title">책 제목 2</h3>
+      </a>
+    </div>
+
+    <div class="book-item" id="ch3">
+      <a href="book-details.html?bookId=3">
+        <img src="path/to/book-image3.jpg" alt="책 제목 3" class="book-image">
+        <h3 class="book-title">책 제목 3</h3>
+      </a>
+    </div>
+    <div class="book-item" id="ch4">
+      <a href="book-details.html?bookId=4">
+        <img src="path/to/book-image3.jpg" alt="책 제목 4" class="book-image">
+        <h3 class="book-title">책 제목 4</h3>
+      </a>
+    </div>
+  </div>
+
+  <!-- TabBox와 Bookmark를 감싸는 새로운 컨테이너 -->
+  <div class="home_div2">
+    <div class="tabBox">
+      <div class="ctn ctn1">
+        <h3><a href="#none" class="tab-link" data-tab="1">로맨스</a></h3>
+        <div class="box">
+          <table border="1">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="ctn ctn2">
+        <h3><a href="#none" class="tab-link" data-tab="2">추리</a></h3>
+        <div class="box">
+          <table border="1">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="ctn ctn3">
+        <h3><a href="#none" class="tab-link" data-tab="3">판타지</a></h3>
+        <div class="box">
+          <table border="1">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bookmark 섹션 -->
+    <div class="bookmark">
+      <div class="bookmark-label">독자PICK 1위</div>
+    </div>
+  </div>
+</section>
+
+<div th:replace="hnf/footer :: footer"></div>
+
+</body>
+<script>
+  $(function(){
+      init();
+  });
+
+  function init() {
+      $(".tabBox>div").eq(0).addClass("ctnOn"); // 처음에 첫 번째 탭이 열려있도록 설정
+      $(".tabBox h3 a").on("click focus", function(){
+          var tabIndex = $(this).data("tab"); // 클릭된 탭의 인덱스를 가져옴
+
+          $(".tabBox>div").removeClass("ctnOn"); // 모든 탭 내용 숨기기
+          $(".tabBox .ctn" + tabIndex).addClass("ctnOn"); // 해당 탭 내용 보여주기
+      });
+  }
+</script>
+
+</html>

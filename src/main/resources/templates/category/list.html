@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>카테고리 목록</title>
+</head>
+<body>
+<h1>카테고리 목록</h1>
+<ul>
+  <li th:each="category : ${categories}">
+    <span th:text="${category.categoryName}"></span>
+  </li>
+</ul>
+</body>
+</html>
