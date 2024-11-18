@@ -129,10 +129,15 @@ public class MemberServiceImpl implements MemberService {
         // 중복된 사용자가 있을 때 추가 처리 가능
         MemberEntity member = members.get(); // 첫 번째 사용자를 선택 (혹은 추가 로직으로 선택)
 
+        // 비밀번호가 맞는지 체크
         if (member.getPwd().equals(pwd)) {
+            // 로그인 성공 시 관리자 권한 확인
+            if ("관리자".equals(member.getRole())) {
+                System.out.println("관리자로 로그인한 사용자: " + member.getUserid());
+            }
             return member;
         } else {
-            return null;
+            return null; // 비밀번호가 틀리면 null 반환
         }
     }
 

