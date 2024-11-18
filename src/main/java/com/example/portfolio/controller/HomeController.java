@@ -38,6 +38,12 @@ import java.util.stream.Collectors;
         private final BookServiceImpl bookService;
         private final BookMarkService bookMarkService; // 북마크 서비스 추가
 
+    @GetMapping("/")
+    public String index(){
+
+        return "redirect:/home";
+    }
+
         @GetMapping("/home")
         public String home(HttpSession session, Model model) {
             String userid = (String) session.getAttribute("userid");

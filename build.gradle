@@ -36,7 +36,7 @@ dependencies {
 	implementation 'net.coobird:thumbnailator:0.4.14'
 
 	// Add the servlet API dependency
-	implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0' // 또는 최신 버전 사용 가능
+	//implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0' // 또는 최신 버전 사용 가능
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
