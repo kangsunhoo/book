@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>책수정</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+</head>
+<body>
+<div th:replace="hnf/header :: header"></div>
+<div th:replace="hnf/nav :: nav"></div>
+<div class="book_modify">
+  <form method="post" th:action="@{/book_modify_proc}">
+
+  <input type="hidden" name="bookId" th:value="${book.bookId}" />
+
+      <label for="sbookFile">표지 등록</label>
+      <input type="file" name="sbookFile" th:value="${book.sbookFile} "required> <br><!-- 파일 업로드 필드 -->
+
+    <label for="bookTitle">책 제목:</label>
+    <input type="text" id="bookTitle" name="bookTitle" th:value="${book.bookTitle}" required><br>
+
+    <label for="bookAuthor">저자:</label>
+    <input type="text" id="bookAuthor" name="bookAuthor" th:value="${book.bookAuthor}" required><br>
+
+    <label for="bookCompany">출판사:</label>
+    <input type="text" id="bookCompany" name="bookCompany" th:value="${book.bookCompany}" required><br>
+
+    <label for="category">카테고리:</label>
+    <input type="text" id="category" name="category" th:value="${book.category.categoryName}" required><br>
+
+    <label for="bookContent">내용:</label>
+    <textarea id="bookContent" name="bookContent" rows="5" cols="60" required th:text="${book.bookContent}"></textarea><br>
+
+    <button type="submit">수정 완료</button>
+    <button type="button" onclick="hideBookEditBox()">취소</button>
+  </form>
+</div>
+<div th:replace="hnf/footer :: footer"></div>
+</body>
+</html>

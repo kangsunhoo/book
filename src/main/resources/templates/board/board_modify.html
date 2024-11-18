@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+</head>
+<body>
+<div th:replace="~{hnf/header :: header}"></div>
+<div th:replace="~{hnf/nav :: nav}"></div>
+<div class="board_upload">
+    <h2>게시글 수정</h2>
+    <form action="/board_modify_proc" method="post">
+        <table>
+            <tr>
+                <td>제목</td>
+                <td><input type="text" name="title" id="title" th:value="${board.title}"></td>
+            </tr>
+            <tr>
+                <td>아이디</td>
+                <!-- 로그인한 사용자의 닉네임을 th:value로 바인딩 -->
+                <td><input type="text" name="userid" id="userid" th:value="${userid}" readonly></td>
+            </tr>
+            <tr>
+                <td>내용</td>
+                <!-- textarea는 th:text를 사용해 값 설정 -->
+                <td><textarea name="conte" cols="60" rows="30" th:text="${board.conte}"></textarea></td>
+            </tr>
+        </table>
+        <!-- idx를 hidden input으로 추가 -->
+        <input type="hidden" name="idx" th:value="${board.idx}"/>
+        <button type="submit">등록</button>
+    </form>
+</div>
+<div th:replace="hnf/footer :: footer"></div>
+</body>
+</html>

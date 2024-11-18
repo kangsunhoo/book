@@ -43,9 +43,18 @@ public class BookEntity {
     @Column(name = "REGDATE")
     private LocalDateTime regdate;
 
-    @PrePersist
-    protected void onCreate() {
-        regdate = LocalDateTime.now(); // 엔티티가 생성될 때 날짜 설정
+    @Column(name = "thumbnail_file")
+    private String thumbnailFile;
+
+    // Getter 및 Setter 추가
+    public String getThumbnailFile() {
+        return thumbnailFile;
     }
+
+    public void setThumbnailFile(String thumbnailFile) {
+        this.thumbnailFile = thumbnailFile;
+    }
+
+
 
 }

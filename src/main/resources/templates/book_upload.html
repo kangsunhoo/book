@@ -2,18 +2,19 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
-  <title>책 등록</title>
+  <title>도서 등록</title>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
 </head>
 <body>
 
 <!-- 헤더 및 사이드바 포함 -->
 <div th:replace="hnf/header :: header"></div>
-<div th:replace="hnf/aside :: aside"></div>
+<div th:replace="hnf/nav :: nav"></div>
 
 <!-- 책 등록 폼 -->
 <div class="book_upload">
-  <h2>책 등록</h2>
+  <h2>도서 등록</h2>
   <form action="/book_upload_proc" method="post" enctype="multipart/form-data"> <!-- POST 요청과 파일 업로드를 지원 -->
     <table>
       <tr>
@@ -49,7 +50,7 @@
         <td><textarea name="bookContent" rows="5" required></textarea></td> <!-- 책 내용 필드 -->
       </tr>
     </table>
-    <button type="submit">책 등록</button> <!-- 제출 버튼 -->
+    <button type="submit">등록</button> <!-- 제출 버튼 -->
   </form>
 </div>
 

@@ -8,14 +8,18 @@
 <aside class="aside">
 <DIV CLASS="aside_div">
     <table>
-        <tr><td><a href="">게시판</a></td> </tr>
-        <tr><td><a href="">리뷰등록</a></td></tr>
+        <tr><td><a href="/home">홈</a></td> </tr>
+        <tr><td><a href="/board/list">게시판</a></td> </tr>
+        <tr><td><a href="/board/new">글쓰기</a></td></tr>
         <tr><td><a href="/book_list">도서모음</a></td></tr>
         <tr th:if="${session.userid != null and session.role == '관리자'}">
             <td><a href="/book_upload">책등록</a></td>
         </tr>
         <tr th:if="${session.userid != null and session.role == '관리자'}">
             <td><a href="/member">회원리스트</a></td>
+        </tr>
+        <tr th:if="${session.userid != null and session.role == '관리자'}">
+            <td><a href="/categories/add">카테고리 등록</a></td>
         </tr>
 
     </table>

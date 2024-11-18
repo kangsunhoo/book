@@ -3,45 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 </head>
 <body>
 <div th:replace="hnf/header :: header"></div>
-<div th:replace="hnf/aside :: aside"></div>
-
+<div th:replace="hnf/nav :: nav"></div>
 <section>
+  <div class="home">
   <br>
   <div class="new">
-    <div class="new-label">신작</div>
-    <div class="book-item" id="ch1">
-      <a href="book-details.html?bookId=1">
-        <img src="path/to/book-image1.jpg" alt="책 제목 1" class="book-image">
-        <h3 class="book-title">책 제목 1</h3>
-      </a>
-    </div>
-
-    <div class="book-item" id="ch2">
-      <a href="book-details.html?bookId=2">
-        <img src="path/to/book-image2.jpg" alt="책 제목 2" class="book-image">
-        <h3 class="book-title">책 제목 2</h3>
-      </a>
-    </div>
-
-    <div class="book-item" id="ch3">
-      <a href="book-details.html?bookId=3">
-        <img src="path/to/book-image3.jpg" alt="책 제목 3" class="book-image">
-        <h3 class="book-title">책 제목 3</h3>
-      </a>
-    </div>
-    <div class="book-item" id="ch4">
-      <a href="book-details.html?bookId=4">
-        <img src="path/to/book-image3.jpg" alt="책 제목 4" class="book-image">
-        <h3 class="book-title">책 제목 4</h3>
+    <div class="new-label" >신작</div>
+    <div th:each="book : ${recentBooks}" class="book-item" th:id="'ch' + ${book.bookId}">
+      <a th:href="@{'/book_detail?bookId=' + ${book.bookId}}">
+        <img th:src="@{'/uploads/' + ${book.obookFile}}" th:alt="${book.bookTitle}" class="book-image" >
+        <h3 th:text="${book.bookTitle}" class="book-title"></h3>
+        <p th:text="${book.bookAuthor}"></p> <!-- 책 저자 표시 -->
       </a>
     </div>
   </div>
+
 
   <!-- TabBox와 Bookmark를 감싸는 새로운 컨테이너 -->
   <div class="home_div2">
@@ -49,39 +30,33 @@
       <div class="ctn ctn1">
         <h3><a href="#none" class="tab-link" data-tab="1">로맨스</a></h3>
         <div class="box">
-          <table border="1">
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </table>
+          <div th:each="book : ${recentRomanceBooks}" class="book-item" th:id="'ch' + ${book.bookId}">
+            <a th:href="@{'/book_detail?bookId=' + ${book.bookId}}">
+              <img th:src="@{'/uploads/' + ${book.obookFile}}" th:alt="${book.bookTitle}" class="book-image" >
+            </a>
+          </div>
         </div>
       </div>
 
       <div class="ctn ctn2">
         <h3><a href="#none" class="tab-link" data-tab="2">추리</a></h3>
         <div class="box">
-          <table border="1">
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </table>
+          <div th:each="book : ${getRecentMistaryBooks}" class="book-item" th:id="'ch' + ${book.bookId}">
+            <a th:href="@{'/book_detail?bookId=' + ${book.bookId}}">
+              <img th:src="@{'/uploads/' + ${book.obookFile}}" th:alt="${book.bookTitle}" class="book-image" >
+            </a>
+          </div>
         </div>
       </div>
 
       <div class="ctn ctn3">
         <h3><a href="#none" class="tab-link" data-tab="3">판타지</a></h3>
         <div class="box">
-          <table border="1">
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </table>
+          <div th:each="book : ${getRecentFantasyBooks}" class="book-item" th:id="'ch' + ${book.bookId}">
+            <a th:href="@{'/book_detail?bookId=' + ${book.bookId}}">
+              <img th:src="@{'/uploads/' + ${book.obookFile}}" th:alt="${book.bookTitle}" class="book-image" >
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -89,13 +64,29 @@
     <!-- Bookmark 섹션 -->
     <div class="bookmark">
       <div class="bookmark-label">독자PICK 1위</div>
+
+      <!-- 북마크가 가장 많이 된 책이 있을 때 -->
+      <div th:if="${topBook}" class="top-book-item">
+        <a th:href="@{'/book_detail?bookId=' + ${topBook.bookId}}">
+          <img th:src="@{'/uploads/' + ${topBook.obookFile}}" th:alt="${topBook.bookTitle}" class="book-image" style="width:200px; height:300px" >
+          <h4 th:text="${topBook.bookTitle}"></h4>
+        </a>
+      </div>
+
+      <!-- 책이 없을 때 -->
+      <div th:if="${topBook == null}">북마크가 없습니다.</div>
     </div>
   </div>
+  </div>
+
 </section>
 
 <div th:replace="hnf/footer :: footer"></div>
 
 </body>
+<!-- jQuery 라이브러리 추가 -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(function(){
       init();
@@ -111,5 +102,4 @@
       });
   }
 </script>
-
 </html>

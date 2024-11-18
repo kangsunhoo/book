@@ -17,11 +17,13 @@ public class ReviewEntity {
     @Column(name = "IDX", unique = true, nullable = false)
     private Long idx; // 리뷰 ID
 
-    @Column(name = "USERID", nullable = false, length = 100)
-    private String userid; // 사용자 ID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid", referencedColumnName = "userid", nullable = false)
+    private MemberEntity member; // 사용자 엔티티와의 관계
 
-    @Column(name = "BOOKID", nullable = false)
-    private Long bookId; // 책 ID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOOKID", nullable = false)
+    private BookEntity book; // 책 엔티티와의 관계
 
     @Column(name = "REVIEW", nullable = false, length = 3500)
     private String review; // 리뷰 내용
@@ -35,6 +37,9 @@ public class ReviewEntity {
     @PrePersist
     protected void onCreate() {
         regdate = LocalDateTime.now(); // 엔티티가 생성될 때 날짜 설정
+    }
+    public void  update(String review){
+        this.review =review;
     }
 }
 

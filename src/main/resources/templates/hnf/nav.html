@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- header 아래에 nav 배치 -->
+<nav class="navigation1">
+  <a href="/home"><b>홈</b></a>
+  <a href="/board/list"><b>게시판</b></a>
+  <a href="/board/new"><b>글쓰기</b></a>
+  <a href="/book_list"><b>도서모음</b></a>
+  <a th:if="${session.userid != null and session.role == '관리자'}" href="/book_upload"><b>책등록</b></a>
+  <a th:if="${session.userid != null and session.role == '관리자'}" href="/member"><b>회원리스트</b></a>
+  <a th:if="${session.userid != null and session.role == '관리자'}" href="/categories/add"><b>카테고리 등록</b></a>
+</nav>
+</body>
+</html>

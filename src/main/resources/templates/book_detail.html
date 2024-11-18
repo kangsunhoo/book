@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>책 상세 정보</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- Slim 버전에서 일반 버전으로 변경 -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <script>
+        function addBookmark(bookId) {
+            fetch(`/bookmark/toggle?bookId=${bookId}`, {
+                method: 'POST',
+                credentials: 'include'
+            }).then(response => response.text())
+            .then(data => {
+                alert(data);
+                 // 북마크 상태에 따라 아이콘 변경
+            const bookmarkIcon = document.getElementById('bookmark-icon');
+            if (bookmarkIcon.classList.contains('fi-rr-bookmark')) {
+                bookmarkIcon.classList.remove('fi-rr-bookmark');
+                bookmarkIcon.classList.add('fi-sr-bookmark');
+            } else {
+                bookmarkIcon.classList.remove('fi-sr-bookmark');
+                bookmarkIcon.classList.add('fi-rr-bookmark');
+            }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 
 </head>
 <body>
 <div th:replace="hnf/header :: header"></div>
-<div th:replace="hnf/aside :: aside"></div>
+<div th:replace="hnf/nav :: nav"></div>
 
-<div class="book-detail-container" style="margin-left:250px">
-    <div class="book-detail" style="margin-left:250px">
+<div class="book-detail-container">
+    <div class="book-detail">
         <!-- 책 이미지 -->
         <img th:src="@{/uploads/{fileName}(fileName=${book.obookFile}, random=${#dates.format(new java.util.Date(), 'yyyyMMddHHmmss')})}" class="book-image" alt="Book Image" width="200"/>
 
@@ -20,52 +49,169 @@
             <h2 th:text="${book.bookTitle}">책 제목</h2>
             <p><strong>저자:</strong> <span th:text="${book.bookAuthor}">저자 이름</span></p>
             <p><strong>출판사:</strong> <span th:text="${book.bookCompany}">출판사 이름</span></p>
-            <p><strong>카테고리:</strong> <span th:text="${book.categoryName}">카테고리</span></p>
-            <p><strong>등록 날짜:</strong> <span th:text="${formattedRegdate}">등록 날짜</span></p>
-            <p><strong>내용:</strong> <span th:text="${book.bookContent}">책 내용</span></p>
+            <p><strong>카테고리:</strong> <span th:text="${book.category.categoryName}">카테고리</span></p>
+            <p><strong>등록 날짜:</strong>
+                <span th:text="${book.regdate != null ? #temporals.format(book.regdate, 'yyyy-MM-dd') : '날짜 없음'}">등록 날짜</span>
+            </p>
+
+            <p><strong>내용:</strong> <span id="content" th:text="${book.bookContent}">책 내용</span></p>
+            <!-- 북마크 버튼 -->
+            <a th:href="|javascript:addBookmark(${book.bookId})|">
+                <i class="fi fi-rr-bookmark"></i>
+            </a>
+
+            <!-- 수정 버튼: 관리자만 볼 수 있도록 -->
+            <div th:if="${role != null and role == '관리자'}">
+                <button th:onclick="|location.href='@{/book_modify(bookId=${book.bookId})}'|">수정</button>
+            </div>
         </div>
     </div>
-    <!--댓글-->
-    <div class="review-form-container">
+    <!-- 리뷰 목록 -->
+
+    <div class="reviews">
+        <h3>리뷰 목록</h3>
+        <div th:if="${reviews.size() == 0}">
+            <p>작성된 리뷰가 없습니다.</p>
+        </div>
+        <div th:if="${reviews.size() > 0}">
+            <ul>
+                <li th:each="review : ${reviews}" th:id="'review-' + ${review.idx}">
+                    <p>
+                        <strong th:text="${review.nickname}">닉네임</strong>
+                        <span th:text="${review.regdate != null ? #temporals.format(review.regdate, 'yyyy-MM-dd') : '날짜 없음'}">날짜</span>
+                    </p>
+                    <p th:text="${review.review}">리뷰 내용</p>
+
+                    <div th:if="${session.userid == review.userid || session.role == '관리자'}">
+                        <a class="btn btn-primary" role="button" data-toggle="collapse" th:href="'#collapseReview-' + ${review.idx}"  aria-expanded="false" th:attr="aria-controls='Review-' + ${review.idx}">
+                            수정
+                        </a>
+                        <button th:onclick="|deleteReview(${review.idx})|">삭제</button>
+                    </div>
+
+                    <!-- 수정용 텍스트 박스 -->
+                    <div class="collapse" th:id="'collapseReview-' + ${review.idx}">
+                        <form>
+                            <input type="hidden" id="id" th:value="${review.idx}">
+                            <div class="form-group">
+                                <textarea class="form-control" th:id="'review-content-'+${review.idx}" rows="3" th:text="${review.review}"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary" th:onclick="|updateReview(this.closest('form'), '${review.idx}')|">수정</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 리뷰 작성 폼 -->
+    <div class="add_review">
         <h3>리뷰 작성</h3>
-        <form th:action="@{/reviews/new}" method="post">
-            <input type="hidden" name="bookId" th:value="${book.bookId}"/>
-            <input type="hidden" name="userid" th:value="${session.userid}"/> <!-- 세션에서 사용자 ID 가져오기 -->
-
-
-            <label for="review">리뷰 내용:</label>
-            <textarea id="review" name="review" rows="5" required></textarea>
-
-            <button type="submit">리뷰 제출</button>
+        <form th:action="@{/reviews/add}" method="post">
+            <input type="hidden" name="bookId" th:value="${book.bookId}" />
+            <textarea name="content" rows="5" cols="60" placeholder="리뷰를 작성하세요." required></textarea>
+            <button type="submit">리뷰 등록</button>
         </form>
     </div>
-
-    <!-- 리뷰 목록 -->
-    <div class="review-list-container">
-        <h3>리뷰 목록</h3>
-
-        <div th:if="${reviews != null && reviews.size() == 0}">
-            <p>리뷰가 없습니다.</p>
+    <div class="navigation">
+        <div th:if="${nextBook != null}" style="display: flex; justify-content: space-between; width: 100%;">
+            <a th:href="@{/book_detail(bookId=${nextBook.bookId})}" class="link">
+                다음 책 <span th:text="${nextBook.bookTitle}">다음 책 제목</span>
+            </a>
+            <span class="date" th:text="${#temporals.format(nextBook.regdate, 'yyyy-MM-dd')}">날짜 표시 안됨</span>
+        </div>
+        <div th:if="${nextBook == null}">
+            <span>다음 책이 없습니다.</span>
         </div>
 
+        <div class="horizontal-line"></div>
 
-        <div th:each="review : ${reviews}">
-            <div class="review-item">
-                <p><strong th:text="${review.nickname}">닉네임</strong> <span th:text="${#dates.format(review.regdate, 'yyyy-MM-dd HH:mm')}">등록 날짜</span></p>
-                <p th:text="${review.review}">리뷰 내용</p>
-                <form th:action="@{/reviews/delete/{id}(id=${review.idx})}" method="post">
-                    <button type="submit">삭제</button>
-                </form>
-            </div>
-            <hr/>
+        <div th:if="${previousBook != null}" style="display: flex; justify-content: space-between; width: 100%;">
+            <a th:href="@{/book_detail(bookId=${previousBook.bookId})}" class="link">
+                이전 책 <span th:text="${previousBook.bookTitle}">이전 책 제목</span>
+            </a>
+            <span class="date" th:text="${#temporals.format(previousBook.regdate, 'yyyy-MM-dd')}">날짜 표시 안됨</span>
+        </div>
+        <div th:if="${previousBook == null}">
+            <span>이전 책이 없습니다.</span>
         </div>
     </div>
 
-
-    <!-- 뒤로 가기 링크 -->
-    <a th:href="@{/book_list}" class="back-link">← 돌아가기</a>
 </div>
 
-<div th:replace="hnf/footer :: footer"></div>
+<script>
+    function deleteReview(reviewId) {
+      fetch(`/reviews/delete/${reviewId}`, {
+          method: 'DELETE',
+          credentials: 'include' // 세션 쿠키를 포함하여 전송
+      })
+      .then(response => {
+          if (response.status === 200) {
+              alert('리뷰가 삭제되었습니다.');
+              // UI에서 삭제된 리뷰 제거
+              // 예: document.getElementById(`review-${reviewId}`).remove();
+              location.reload(); // 페이지를 새로 고쳐서 리뷰 목록을 갱신
+          } else {
+              alert('리뷰 삭제 중 오류가 발생했습니다: ' + response.statusText);
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('리뷰 삭제 중 오류가 발생했습니다.');
+      });
+    }
+
+
+function updateReview(form, idx) {
+    const data = {
+        review: document.getElementById(`review-content-${idx}`).value,
+    };
+
+    if (!data.review || data.review.trim() === "") {
+        alert("공백 또는 입력하지 않은 부분이 있습니다.");
+        return false;
+    }
+
+    const con_check = confirm("수정하시겠습니까?");
+    if (con_check === true) {
+        fetch(`/reviews/update/${idx}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify(data) // JSON.stringify를 통해 올바른 형식으로 변환
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload(); // 페이지 새로 고침
+            } else {
+                alert('댓글 수정에 실패했습니다.');
+                return response.json();
+            }
+        })
+        .then(errorData => {
+            if (errorData) {
+                console.error('서버 응답:', errorData);
+            }
+        })
+        .catch(error => {
+            alert(JSON.stringify(error));
+        });
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    const contentElement = document.getElementById("content"); // 책 내용 요소 선택
+    const text = contentElement.innerText; // 원래 텍스트 가져오기
+
+    // 텍스트를 15자 단위로 나눔
+    const lines = text.match(/.{1,15}/g) || []; // 15자 단위로 매칭 (텍스트가 없을 경우 빈 배열)
+
+    // 줄 바꿈 태그 추가하여 내용을 갱신
+    contentElement.innerHTML = lines.join("<br>");
+});
+
+
+</script>
+    <div th:replace="~{hnf/footer :: footer}"></div>
 </body>
 </html>

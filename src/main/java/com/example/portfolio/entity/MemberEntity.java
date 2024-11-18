@@ -17,37 +17,37 @@ public class MemberEntity {
     @Column(name="idx", unique = true, nullable = false)
     private Long idx;
 
-    @Column(name = "userid")
-    private  String userid;
+    @Column(name = "userid", unique = true, nullable = false)
+    private String userid; // 사용자 ID
 
-    @Column(name = "pwd")
+    @Column(name = "pwd", nullable = false)
     private  String pwd;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "age")
+    @Column(name = "age", nullable = false)
     private int age;
 
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "postcode")
+    @Column(name = "postcode" ,nullable = false)
     private String postcode;
 
-    @Column(name = "address")
+    @Column(name = "address",nullable = false)
     private String address;
 
-    @Column(name = "DETAILADDRESS")
+    @Column(name = "DETAILADDRESS",nullable = false)
     private String detailAddress;
 
-    @Column(name = "email")
+    @Column(name = "email",nullable = false )
     private String email;
 
-    @Column(name = "regdate")
+    @Column(name = "regdate",nullable = false)
     private LocalDateTime regdate = LocalDateTime.now();
 
     @Column(name = "role")

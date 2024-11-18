@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:margin-left="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 상세페이지</title>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- Slim 버전에서 일반 버전으로 변경 -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+</head>
+<body>
+<div th:replace="~{hnf/header :: header}"></div>
+<div th:replace="hnf/nav :: nav" class="text-center"></div>
+
+<div class="board_detail">
+
+  <table>
+    <tr>
+      <td><strong>제목</strong></td>
+      <td th:text="${board.title}" colspan="3">게시글 제목</td>
+    </tr>
+    <tr>
+      <td><strong>작성자</strong></td>
+      <td th:text="${board.userid}" colspan="3">작성자 아이디</td>
+
+    </tr>
+    <tr>
+      <td colspan="4"><strong>내용</strong></td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        <div class="content"  th:utext="${board.conte}">게시글 내용</div>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>등록일</strong></td>
+      <td th:text="${#temporals.format(board.regdate, 'yyyy-MM-dd')}">등록일</td>
+      <td><strong>조회수</strong></td>
+      <td th:text="${board.hit}">조회수</td>
+    </tr>
+  </table>
+
+  <div th:if="${param.error == 'alreadyLiked'}">
+    <p>이미 좋아요를 누르셨습니다.</p>
+  </div>
+
+  <form th:action="@{/board/like/{idx}(idx=${board.idx})}" method="post">
+    <button type="submit">💖 좋아요 (<span th:text="${board.likes}">0</span>)</button>
+  </form>
+
+  <div class="board_actions">
+    <div th:if="${session.userid == board.userid || role != null and role == '관리자'}">
+      <button th:onclick="|location.href='@{/board_modify(idx=${board.idx})}'|">수정</button>
+    </div>
+    <div th:if="${session.userid == board.userid || role == '관리자'}">
+      <form th:action="@{/board/delete/{idx}(idx=${board.idx})}" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <button type="submit">삭제</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="comments">
+    <h3>댓글 목록</h3>
+    <div th:if="${comments.size() == 0}">
+      <p>댓글이 없습니다.</p>
+    </div>
+    <div th:if="${comments.size() > 0}">
+      <ul>
+        <li th:each="comment : ${comments}" th:id="'comment-' + ${comment.idx}">
+          <p>
+            <strong th:text="${comment.nickname}">닉네임</strong>
+            <span th:text="${#temporals.format(comment.regdate, 'yyyy-MM-dd')}">날짜</span>
+          </p>
+          <p th:text="${comment.commentText}">댓글 내용</p>
+
+          <div th:if="${session.userid == comment.userid || session.role == '관리자'}">
+            <a class="btn btn-primary" role="button" data-toggle="collapse" th:href="'#collapseComment-' + ${comment.idx}"  aria-expanded="false" th:attr="aria-controls='collapseComment-' + ${comment.idx}">
+              수정
+            </a>
+            <button th:onclick="|deleteComment(${comment.idx})|">삭제</button>
+          </div>
+
+          <div class="collapse" th:id="'collapseComment-' + ${comment.idx}">
+            <form>
+              <input type="hidden" id="id" th:value="${comment.idx}">
+              <div class="form-group">
+                <textarea class="form-control" th:id="'comment-content-'+${comment.idx}" rows="3" th:text="${comment.commentText}"></textarea>
+              </div>
+              <button type="button" class="btn btn-outline-primary" th:onclick="|updateComment(this.closest('form'), '${comment.idx}')|">수정</button>
+            </form>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="add_comment">
+    <h3>댓글 작성</h3>
+    <form th:action="@{/comments/add}" method="post">
+      <input type="hidden" name="boardIdx" th:value="${board.idx}" />
+      <textarea name="commentText" rows="5" cols="60" placeholder="댓글을 작성하세요." required></textarea>
+      <button type="submit">댓글 등록</button>
+    </form>
+  </div>
+
+  <div class="navigation">
+    <div th:if="${nextBoard != null}" style="display: flex; justify-content: space-between; width: 100%;">
+      <a th:href="@{/board/{idx}(idx=${nextBoard.idx})}" class="link">
+        다음글 <span th:text="${nextBoard.title}">다음글 제목</span>
+      </a>
+      <span class="date" th:text="${#temporals.format(nextBoard.regdate, 'yyyy-MM-dd')}">날짜 표시 안됨</span>
+    </div>
+    <div th:if="${nextBoard == null}">
+      <span>다음게시글이 없습니다.</span>
+    </div>
+
+    <div class="horizontal-line"></div> <!-- 수평선 요소 추가 -->
+
+    <div th:if="${previousBoard != null}" style="display: flex; justify-content: space-between; width: 100%;">
+      <a th:href="@{/board/{idx}(idx=${previousBoard.idx})}" class="link">
+        이전글 <span th:text="${previousBoard.title}">이전글 제목</span>
+      </a>
+      <span class="date" th:text="${#temporals.format(previousBoard.regdate, 'yyyy-MM-dd')}">날짜 표시 안됨</span>
+    </div>
+    <div th:if="${previousBoard == null}">
+      <span>이전게시글이 없습니다.</span>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- JavaScript 코드 -->
+<script>
+  function updateComment(form, idx) {
+    const data = {
+        commentText: document.getElementById(`comment-content-${idx}`).value,
+    };
+
+    if (!data.commentText || data.commentText.trim() === "") {
+        alert("공백 또는 입력하지 않은 부분이 있습니다.");
+        return false;
+    }
+
+    const con_check = confirm("수정하시겠습니까?");
+    if (con_check === true) {
+        // 템플릿 리터럴을 사용하여 idx를 변수로 받아 URL을 구성합니다.
+        fetch(`/comments/update/${idx}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('댓글 수정에 실패했습니다.');
+                return response.json();
+            }
+        })
+        .then(errorData => {
+            if (errorData) {
+                console.error('서버 응답:', errorData);
+            }
+        })
+        .catch(error => {
+            alert(JSON.stringify(error));
+        });
+    }
+}
+
+
+    function deleteComment(commentId) {
+        fetch(`/comments/delete/${commentId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        }).then(response => {
+            if (response.ok) {
+                alert('댓글이 삭제되었습니다.');
+                document.getElementById(`comment-${commentId}`).remove();
+            } else if (response.status === 403) {
+                alert('권한이 없습니다.');
+            } else {
+                alert('댓글 삭제에 실패했습니다.');
+            }
+        });
+    }
+
+    window.onload = function() {
+        document.querySelector('header').style.textAlign = 'center';
+        document.querySelector('nav').style.textAlign = 'center';
+    };
+</script>
+
+<div th:replace="~{hnf/footer :: footer}"></div>
+</body>
+</html>

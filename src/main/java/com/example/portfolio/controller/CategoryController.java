@@ -1,8 +1,9 @@
 package com.example.portfolio.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import com.example.portfolio.dto.CategoryDTO;
-import com.example.portfolio.service.CategoryService;
+import com.example.portfolio.service.CategoryServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 @AllArgsConstructor
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
 
     // 카테고리 추가 폼 페이지 표시
     @GetMapping("/categories/add")
-    public String showAddCategoryForm(Model model) {
+    public String showAddCategoryForm(Model model, HttpSession session) {
+
+        String userid = (String) session.getAttribute("userid");
+        model.addAttribute("userid", userid);
+        model.addAttribute("role", session.getAttribute("role"));
         model.addAttribute("categoryDTO", new CategoryDTO());
         return "category/add"; // templates/category/add.html
     }
@@ -35,7 +40,12 @@ public class CategoryController {
 
     // 카테고리 목록 페이지 표시
     @GetMapping("/categories")
-    public String listCategories(Model model) {
+    public String listCategories(Model model, HttpSession session) {
+
+        String userid = (String) session.getAttribute("userid");
+        model.addAttribute("userid", userid);
+        model.addAttribute("role", session.getAttribute("role"));
+
         model.addAttribute("categories", categoryService.getAllCategories());
         return "category/list"; // templates/category/list.html
     }

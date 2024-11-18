@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>북 목록</title>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
   <style>
     .active {
         font-weight: bold;
@@ -14,55 +15,81 @@
         height: auto; /* 비율 유지 */
     }
   </style>
+  <script>
+    // 체크박스 선택 시 삭제 버튼 활성화/비활성화
+    function toggleDeleteButton() {
+        const checkboxes = document.querySelectorAll('input[name="selectedIds"]:checked');
+        const deleteButton = document.getElementById("deleteButton");
+        deleteButton.disabled = checkboxes.length === 0; // 체크된 항목이 없으면 버튼 비활성화
+    }
+
+    // 전체 선택/해제 기능
+    function toggleSelectAll(source) {
+        const checkboxes = document.querySelectorAll('input[name="selectedIds"]');
+        checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+        toggleDeleteButton(); // 전체 선택 시에도 삭제 버튼 상태 변경
+    }
+  </script>
 </head>
 <body>
 <div th:replace="hnf/header :: header"></div>
-<div th:replace="hnf/aside :: aside"></div>
-<div class="main-container">
+<div th:replace="hnf/nav :: nav"></div>
+<div class="board_list">
 
   <!-- 북 목록 테이블 -->
-  <table border="1" th:if="${allBooks != null}">
-    <tr>
-      <th>번호</th>
-      <th>이미지</th>
-      <th>책 제목</th>
-      <th>저자</th>
-      <th>출판사</th>
-      <th>카테고리</th>
-      <th>등록 날짜</th>
-      <th>삭제</th>
-    </tr>
-    <tr th:each="book: ${allBooks}">
-      <td th:text="${book.bookId}"></td>
-      <td>
-        <img th:src="@{/uploads/{fileName}(fileName=${book.obookFile}, random=${#dates.format(new java.util.Date(), 'yyyyMMddHHmmss')})}" class="book-image" alt="Book Image"/>
+  <form action="/book/deleteSelected" method="post">
+    <table border="1" th:if="${allBooks != null}">
+      <thead>
+      <tr>
+        <!-- 관리자일 때만 전체 선택 체크박스 표시 -->
+        <th th:if="${role == '관리자'}"><input type="checkbox" onclick="toggleSelectAll(this)"></th>
+        <th>번호</th>
+        <th>이미지</th>
+        <th>책 제목</th>
+        <th>저자</th>
+        <th>출판사</th>
+        <th>카테고리</th>
+        <th>등록 날짜</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book, index : ${allBooks}">
+        <!-- 관리자일 때만 개별 체크박스 표시 -->
+        <td th:if="${role == '관리자'}"><input type="checkbox" name="selectedIds" th:value="${book.bookId}" onclick="toggleDeleteButton()"></td>
+        <td th:text="${allBooks.totalElements - (currentPage * allBooks.size) - index.count+1}"></td> <!-- 최신순 번호 -->
+        <td>
+          <img th:src="@{/uploads/{fileName}(fileName=${book.obookFile}, random=${#dates.format(new java.util.Date(), 'yyyyMMddHHmmss')})}" class="book-image" alt="Book Image"/>
+        </td>
+        <td><a th:href="@{/book_detail(bookId=${book.bookId})}" th:text="${book.bookTitle}"></a></td>
+        <td th:text="${book.bookAuthor}"></td>
+        <td th:text="${book.bookCompany}"></td>
+        <td th:text="${book.category.categoryName}"></td>
+        <td>
+          <span th:text="${book.regdate != null ? #temporals.format(book.regdate, 'yyyy-MM-dd') : '날짜 없음'}">등록 날짜</span>
+        </td>
+      </tr>
 
-      </td>
-      <td><a th:href="@{/book_detail(bookId=${book.bookId})}" th:text="${book.bookTitle}"></a></td>
-      <td th:text="${book.bookAuthor}"></td>
-      <td th:text="${book.bookCompany}"></td>
-      <td th:text="${book.category.categoryId}"></td>
-      <td th:text="${book.regdate}"></td>
-      <td><a th:href="@{/delBook(bookId=${book.bookId})}" th:text="삭제"></a></td>
-    </tr>
+      </tbody>
 
-  </table>
+    </table>
+
+    <!-- 삭제 버튼도 관리자만 보이도록 설정 -->
+    <button type="submit" id="deleteButton" th:if="${role == '관리자'}" disabled style="margin-top: 10px;">선택 삭제</button>
+  </form>
 
   <!-- 페이지네이션 -->
   <div th:if="${totalPages > 0}">
     <span th:if="${currentPage > 0}">
-        <a th:href="@{/book_list(page=${currentPage - 1})}">이전</a>
+      <a th:href="@{/book_list(page=${currentPage - 1})}">이전</a>
     </span>
     <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-        <a th:href="@{/book_list(page=${i})}"
-           th:text="${i + 1}" th:class="${i == currentPage} ? 'active' : ''"></a>
+      <a th:href="@{/book_list(page=${i})}" th:text="${i + 1}" th:class="${i == currentPage} ? 'active' : ''"></a>
     </span>
     <span th:if="${currentPage + 1 < totalPages}">
-        <a th:href="@{/book_list(page=${currentPage + 1})}">다음</a>
+      <a th:href="@{/book_list(page=${currentPage + 1})}">다음</a>
     </span>
   </div>
 </div>
 <div th:replace="hnf/footer :: footer"></div>
-
 </body>
 </html>

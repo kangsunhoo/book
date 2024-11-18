@@ -8,38 +8,180 @@ body {
     flex-direction: column; /* 세로 방향으로 정렬 */
 }
 
+/* 컨테이너 기본 설정 */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+/* 아이템 기본 설정 */
+.item {
+    flex: 1 1 200px; /* 최소 너비는 200px, 화면 크기에 맞춰 늘어남 */
+}
+
+/* 미디어 쿼리 */
+@media (max-width: 768px) {
+    .container {
+        padding: 5px;
+    }
+    .item {
+        flex: 1 1 100px;
+    }
+}
+
+/* CSS 파일 */
+
 .header {
-    background-color: #4a6fa5; /* 어두운 파란색 */
-    color: #f9f9f9; /* 밝은 색 글자 */
+    background-color: white; /* 배경을 흰색으로 설정 */
+    color: #001f3f; /* 글씨는 어두운 파란색 */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0px; /* 패딩 추가 */
-    width: 100%; /* 헤더가 전체 너비를 차지하도록 설정 */
-    height: 50px; /* 헤더 높이 */
-    position: relative; /* 나중에 aside와의 배치 조정에 필요 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    padding: 10px 0;
+    width: 100%;
+    height: 80px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.logo {
+    flex: 1; /* 로고 영역을 유동적으로 조정 */
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    margin-left: 400px; /* 로고의 왼쪽 여백 */
+    margin-right: 30px; /* 로고의 오른쪽 여백 */
 }
 
 .logo p {
-    margin-left: 15px;
-    font-size: 24px; /* 로고 글씨 크기 */
+    font-size: 30px; /* 로고 글씨 크기 */
     font-weight: bold; /* 굵은 글씨 */
+    color: #001f3f; /* 글씨를 어두운 파란색으로 설정 */
+}
+
+.search-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 3px solid #001f3f; /* 굵은 테두리 */
+    border-radius: 10px; /* 둥근 모서리 */
+    padding: 10px; /* 검색창 내부에 여백 추가 */
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: none; /* 내부 div 테두리 제거 */
+}
+
+.search-box select,
+.search-box input[type="text"],
+.search-box button {
+    border: none; /* 내부 요소들의 테두리 제거 */
+}
+
+.search-box select {
+    height: 40px;
+    padding: 0 10px;
+    font-size: 16px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+.search-box input[type="text"] {
+    flex: 1;
+    height: 38px;
+    width: 400px;
+    padding: 0 15px 0 40px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-box button {
+    height: 39px;
+    padding: 0 20px;
+    background-color: white;
+    color: #001f3f;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+}
+
+
+.auth {
+    flex: 1; /* 인증 영역을 유동적으로 조정 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+     position: absolute;
+        top: 5px;
+        right: 15px;
+        color: #001f3f !important; /* 우선순위를 높이기 위해 !important 추가 */
+}
+
+.auth a {
+    color: #001f3f !important; /* 우선순위를 높이기 위해 !important 추가 */
+}
+
+
+/* 추가된 스타일은 동일하게 유지 */
+
+
+
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .search-container .icon {
+        max-width: 100%;
+    }
+
+    .search-box input[type="text"],
+    .search-box select,
+    .search-box button {
+        font-size: 14px;
+    }
+}
+
+
+.userid_header {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    color: #001f3f !important; /* 우선순위를 높이기 위해 !important 추가 */
+}
+
+
+/* 네비게이션 스타일 */
+.navigation1 {
+    width: 100%; /* 화면 전체 너비 사용 */
+    background-color: #ffffff; /* 배경색을 흰색으로 설정 */
+    text-align: center !important;
+    padding: 10px 0; /* 상하 패딩 */
+    margin-bottom: 20px;
 
 }
 
-.nav a {
-    color: #f9f9f9; /* 링크 색깔 */
+.navigation1 a {
+    color: #666666; /* 글자색을 회색으로 설정 */
     text-decoration: none; /* 링크 밑줄 제거 */
     margin: 0 15px; /* 링크 사이 여백 */
     padding: 8px 12px; /* 링크에 패딩 추가 */
+    font-weight: 500; /* 약간 굵게 설정 */
     transition: background-color 0.3s, color 0.3s; /* 부드러운 전환 효과 */
 }
 
-.nav a:hover {
-    background-color: #3a5a8c; /* 마우스 오버 시 배경색 */
-    color: #f9f9f9; /* 마우스 오버 시 글자색 */
+.navigation1 a:hover {
+    background-color: #f1f1f1; /* 마우스 오버 시 약간 밝은 배경색 */
+    color: #333333; /* 마우스 오버 시 글자색을 짙은 회색으로 */
 }
+
 
 .auth {
     display: flex; /* 플렉스 박스 레이아웃 사용 */
@@ -67,7 +209,7 @@ footer {
     bottom: 0; /* 화면 하단에 위치 */
     left: 0; /* 왼쪽에 붙임 */
     width: 100%; /* 전체 너비 */
-    background-color: #4a6fa5; /* 어두운 파란색 */
+    background-color:  #001f3f; /* 어두운 파란색 */
     color: #f9f9f9; /* 밝은 색 글자 */
     padding: 10px;
     text-align: center; /* 텍스트 중앙 정렬 */
@@ -76,7 +218,7 @@ footer {
 }
 
 .footer_div {
-    background-color: #4a6fa5; /* 어두운 파란색 */
+    background-color: #001f3f; /* 어두운 파란색 */
     color: #f9f9f9; /* 밝은 색 글자 */
     padding: 20px;
     text-align: center; /* 텍스트 중앙 정렬 */
@@ -98,12 +240,13 @@ footer {
 .aside {
     background-color: #e0e7f5; /* 연한 파란색 */
     padding: 20px; /* 패딩 추가 */
-    width: 200px; /* aside 너비 설정 */
+    width: 160px; /* aside 너비 설정 */
     position: fixed; /* aside를 고정 위치로 설정 */
-    left: 0; /* 왼쪽에 붙임 */
-    top: 80px; /* 헤더 아래에 위치하도록 설정 (헤더 높이에 따라 조정) */
-    bottom: 0; /* 화면 하단까지 차지하도록 설정 */
+    left: 10px; /* 왼쪽에 붙임 */
+    top: 80px; /* 헤더 아래에 위치하도록 설정 */
+    border-radius: 8px; /* 모서리 둥글게 */
 }
+
 
 .aside_div {
     display: flex;
@@ -128,7 +271,7 @@ footer {
 }
 
 .aside_div td {
-    border-bottom: 2px solid #4a6fa5; /* 아랫줄 추가 */
+    border-bottom: 2px solid #ffffff; /* 아랫줄 추가 */
 }
 
 .aside_div td a:hover {
@@ -142,16 +285,28 @@ footer {
     justify-content: space-between;
     padding: 20px;
     margin-top: 20px;
-    position: relative; /* 부모 요소에 상대적 위치 설정 */
+    position: relative;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 250px;
+    border:8px;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 30px;
-    width: 1600px;
-    height: 400px;
-    border: 2px solid #4a6fa5; /* 테두리 추가 */
+    width: 1200px; /* 가로 길이를 home_div2와 동일하게 설정 */
+    height: 370px;
+    border: 4px solid #f1f3f5;
 }
+
+.home_div2 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1200px; /* 가로 길이를 new와 동일하게 설정 */
+    margin-bottom: 20px;
+}
+
 
 /* "신작" 라벨 스타일 */
 .new-label {
@@ -168,9 +323,10 @@ footer {
 
 
 
-.book-item {
-    width: 300px; /* 각 항목의 너비 설정 */
-    margin-bottom: 20px; /* 아래쪽 여백 추가 */
+.new .book-item {
+    width: 230px; /* 각 항목의 너비 설정 */
+    height:350px;
+    margin-bottom: 10px; /* 아래쪽 여백 추가 */
     text-align: center; /* 중앙 정렬 */
     background-color: #f0f0f0; /* 책 항목 배경색 */
     border-radius: 8px; /* 모서리 둥글게 */
@@ -184,13 +340,15 @@ footer {
 }
 
 .book-image {
-    max-width: 100%; /* 이미지가 부모의 너비를 넘지 않도록 설정 */
+    max-width: 80%; /* 이미지가 부모의 너비를 넘지 않도록 설정 */
+    max-height:80%;
+    height:700px;
     height: auto; /* 비율을 유지하면서 높이 자동 조정 */
 }
 
 .book-title {
-    margin-top: 10px; /* 제목과 이미지 간의 여백 */
-    font-size: 18px; /* 제목 글씨 크기 */
+    margin-top: 5px; /* 제목과 이미지 간의 여백 */
+    font-size: 13px; /* 제목 글씨 크기 */
     color: #333; /* 제목 색상 */
 }
 
@@ -223,14 +381,13 @@ footer {
   			margin:0;
   			padding:15px;
   			height:300px;
-  			width:600px;
+  			width:700px;
   			border:1px
   			solid #ccc;
   			border-radius:0 5px 5px 5px;
   			-webkit-border-radius:0 5px 5px 5px;
   			-moz-border-radius:0 5px 5px 5px;
   		}
-
 
   		.tabBox .btnMore {
   			display:none;
@@ -251,34 +408,29 @@ footer {
     display: flex; /* 두 개의 div를 나란히 배치하기 위한 flex 설정 */
     justify-content: space-between; /* 두 div 사이에 공간을 고르게 배치 */
     align-items: flex-start; /* 상단 정렬 */
-    margin-left: 250px; /* 왼쪽에서 450px 떨어지도록 설정 */
+
     width:500px
 
 }
 
-
-
-
 /* TabBox와 bookmark를 나란히 배치하기 위한 Flex 설정 */
-.home_div2 {
-    display: flex; /* 플렉스 박스 사용하여 수평 정렬 */
-    justify-content: space-between; /* 각 요소가 여백을 가지고 떨어지도록 설정 */
-    margin-top: 20px;
-    margin-left: 250px; /* 왼쪽에 여백을 추가하여 Aside와 겹치지 않도록 설정 */
-    width: calc(100% - 270px); /* 전체 너비에서 aside의 너비를 고려하여 설정 */
-    margin-bottom:20px
+
+.home_div2 .book-item {
+display: inline-block;
+width:200px;
+height:200px
+  flex: 1 1 calc(33.333% - 20px); /* 3개의 아이템을 균등하게 나열 */
+  margin: 10px;
+  box-sizing: border-box;
 }
 
 
-
 .bookmark {
-    width: 35%; /* 북마크의 너비를 설정하여 TabBox 옆에 나란히 배치 */
-    margin-left: 10px; /* TabBox와의 간격을 추가 */
+    width: 30%; /* 북마크의 너비를 설정하여 TabBox 옆에 나란히 배치 */
     padding: 20px;
     background-color: #ffffff;
-    border: 2px solid #4a6fa5;
+    border: 2px solid #DCDCDC;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
     position: relative;
 }
 
@@ -295,55 +447,60 @@ footer {
     color: #4a6fa5;
 }
 
+.bookmark {
+  text-align: center; /* 텍스트와 이미지를 중앙 정렬 */
+
+}
+
+.bookmark.top-book-item {
+  display: inline-block; /* inline-block으로 설정하여 중앙 정렬 가능 */
+}
+
+.bookmark.book-image {
+  display: block; /* 이미지 블록으로 설정하여 중앙 정렬 */
+margin-left:10px;
+
+}
+
+
 
 .join_proc {
-    width: 50%; /* 가로 너비를 50%로 설정 */
+    width: 40%; /* 가로 너비를 40%로 설정 */
     margin: 40px auto; /* 위쪽 여백 40px, 좌우 자동으로 중앙 정렬 */
     padding: 20px; /* 내부 여백 */
     background-color: #ffffff; /* 배경색 */
-    border-radius: 12px; /* 모서리 둥글게 */
+    border-radius: 10px; /* 모서리 둥글게 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
 }
 
 .join_proc table {
-    width: 100%; /* 테이블 너비 100% */
+    width: 60%; /* 테이블 너비 100% */
     border-collapse: collapse; /* 경계선 합치기 */
-    margin-top: 20px; /* 위쪽 여백 */
+    margin: 20px auto; /* 위쪽 여백 */
 }
 
-.join_proc th, .join_proc td {
-    padding: 15px; /* 셀 여백 */
-    border: 1px solid #ccc; /* 테두리 스타일 */
+.join_proc th,
+.join_proc td {
+    padding: 5px; /* 셀 여백 */
+    border: none; /* 셀의 테두리 제거 */
     text-align: left; /* 왼쪽 정렬 */
 }
 
-.join_proc th {
-    background-color: #4a6fa5; /* 헤더 배경색 */
-    color: #f9f9f9; /* 헤더 글자색 */
-}
-
-.join_proc tr:nth-child(even) {
-    background-color: #f9f9f9; /* 짝수 행 배경색 */
-}
-
-.join_proc tr:hover {
-    background-color: #d9e4f5; /* 마우스 오버 시 배경색 */
-}
-
-/* 텍스트, 패스워드, 숫자 입력 필드 스타일 */
 .join_proc input[type="text"],
 .join_proc input[type="password"],
-.join_proc input[type="number"] {
-    width: calc(50% - 20px); /* 입력 필드의 너비를 100%로 설정 */
-    padding: 10px; /* 내부 여백 */
-    border: 1px solid #ccc; /* 테두리 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    transition: border-color 0.3s; /* 테두리 색 전환 효과 */
-    font-size: 16px; /* 글자 크기 */
-    box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비 */
+.join_proc input[type="number"],
+.join_proc select {
+    width: 400px;
+      height: 40px;
+      font-size: 15px;
+      border: 0;
+      border-radius: 10px;
+      outline: none;
+      padding-left: 10px;
+      background-color: rgb(233,233,233);
 }
 
-/* 입력 필드 포커스 시 */
+
 .join_proc input[type="text"]:focus,
 .join_proc input[type="password"]:focus,
 .join_proc input[type="number"]:focus,
@@ -354,38 +511,71 @@ footer {
 
 /* 셀렉트 박스 스타일 */
 .join_proc select {
-    width: calc(50% - 20px); /* 셀렉트 박스 너비 */
-    padding: 10px; /* 내부 여백 */
-    border: 1px solid #ccc; /* 테두리 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    font-size: 16px; /* 글자 크기 */
-    box-sizing: border-box; /* 테두리를 포함한 너비 계산 */
-    appearance: none; /* 기본 셀렉트 박스 화살표 제거 (모던한 UI) */
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSI4cHgiIHZpZXdCb3g9IjAgMCAxNCA4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0NDQyIgZD0iTTAgMkw3IDZsNy00SDhaIi8+PC9zdmc+'); /* 화살표 이미지 추가 */
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 10px 10px; /* 화살표 크기 조정 */
+   width: 100px;
+       height: 32px;
+       font-size: 15px;
+       border: 1;
+       border-color: lightgray;
+       border-radius: 10px;
+       outline: none;
+       padding-left: 10px;
+
 }
 
-.join_proc input[type="submit"], .join_proc button {
-    background-color: #4a6fa5; /* 버튼 배경색 */
-    color: #fff; /* 버튼 글자색 */
-    padding: 12px 20px; /* 내부 여백 */
-    border: none; /* 테두리 제거 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    cursor: pointer; /* 마우스 포인터 변경 */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* 배경색 및 애니메이션 추가 */
-    font-size: 16px; /* 글자 크기 */
-    font-weight: bold; /* 글자 굵기 */
-    width: 20%; /* 버튼 너비 100% */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 약간의 그림자 */
+.join_proc input[type="submit"],
+.join_proc button {
+ width: 400px;
+    height: 32px;
+    font-size: 15px;
+    border: 0;
+    border-radius: 15px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(164, 199, 255);
 }
 
 /* 버튼에 마우스 올렸을 때 */
-.join_proc input[type="submit"]:hover, .join_proc button:hover {
-    background-color: #365d8f; /* 호버 시 배경색 */
-    transform: translateY(-2px); /* 버튼이 살짝 올라가는 효과 */
+.join_proc input[type="submit"]:hover,
+.join_proc button:hover {
+     width: 400px;
+       height: 32px;
+       font-size: 15px;
+       border: 0;
+       border-radius: 15px;
+       outline: none;
+       padding-left: 10px;
+          background-color: #365d8f; /* 호버 시 배경색 */
 }
+
+/* 이메일 관련 필드 크기 조정 */
+/* 이메일 관련 필드 크기 조정 */
+.join_proc .email-input,
+.join_proc .email-domain {
+    width: calc(30% - 20px) !important; /* !important로 강제 적용 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.join_proc .email-select {
+    width: calc(30% - 20px) !important; /* !important로 강제 적용 */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* 셀렉트 박스 스타일 */
+.join_proc .email-select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSI4cHgiIHZpZXdCb3g9IjAgMCAxNCA4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0NDQyIgZD0iTTAgMkw3IDZsNy00SDhaIi8+PC9zdmc+');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 10px;
+}
+
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
@@ -400,7 +590,7 @@ footer {
     max-width: 400px; /* 최대 너비 설정 */
     margin: 100px auto; /* 가운데 정렬, 상단에서 100px 떨어짐 */
     padding: 40px; /* 내부 여백 */
-    background-color: #f9f9f9; /* 배경색 */
+    background-color: #fff; /* 배경색 */
     border-radius: 10px; /* 모서리를 둥글게 */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
     text-align: center; /* 가운데 정렬 */
@@ -411,11 +601,15 @@ footer {
     width: calc(100% - 20px); /* 100% 너비에서 여백만큼 제외 */
     padding: 10px; /* 내부 여백 */
     margin-bottom: 20px; /* 아래 여백 */
-    border: 1px solid #ccc; /* 테두리 스타일 */
-    border-radius: 5px; /* 모서리 둥글게 */
+    border: 0;
+    border-radius: 15px; /* 모서리 둥글게 */
     font-size: 16px; /* 글자 크기 */
+    background-color: rgb(233,233,233);
     box-sizing: border-box; /* 박스 크기를 테두리와 패딩을 포함한 값으로 설정 */
     transition: border-color 0.3s ease; /* 포커스 시 부드러운 전환 */
+}
+.login input::placeholder {
+    font-weight: bold; /* 글자 굵게 */
 }
 
 /* 입력 필드에 포커스가 있을 때 */
@@ -428,10 +622,10 @@ footer {
 .login button {
     width: 100%; /* 전체 너비 */
     padding: 10px; /* 내부 여백 */
-    background-color: #4a6fa5; /* 버튼 배경색 */
-    color: #fff; /* 글자색 */
+     background-color: rgb(164, 199, 255);
+    color: black; /* 글자색 */
     border: none; /* 테두리 제거 */
-    border-radius: 5px; /* 모서리 둥글게 */
+    border-radius: 15px; /* 모서리 둥글게 */
     font-size: 18px; /* 글자 크기 */
     cursor: pointer; /* 마우스 커서 변경 */
     transition: background-color 0.3s ease; /* 배경색 부드럽게 전환 */
@@ -468,9 +662,11 @@ footer {
 .book_upload h2 {
     margin-bottom: 20px;
     font-size: 24px;
-    color: #4a6fa5;
+    color: black;
     text-align: center;
+    font-weight: bold; /* 또는 font-weight: 700; */
 }
+
 
 .book_upload table {
     width: 100%;
@@ -511,11 +707,12 @@ footer {
 .book_upload button {
     width: 100%;
     padding: 12px;
-    background-color: #4a6fa5;
-    color: #fff;
+     background-color: rgb(164, 199, 255);
+    color: black;
     border: none;
-    border-radius: 5px;
-    font-size: 18px;
+    border-radius: 15px;
+    font-size: 20px;
+      font-weight: bold; /* 또는 font-weight: 700; */
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 20px;
@@ -573,32 +770,21 @@ footer {
 }
 
 .board_upload input[type="submit"] {
-    background-color: #4a6fa5; /* 버튼 배경색 */
-    color: #fff; /* 버튼 글자색 */
+    font-size:15px;
+    width:100%;
+   background-color: rgb(164, 199, 255);
+    color: #black; /* 버튼 글자색 */
     padding: 12px 20px; /* 내부 여백 */
     border: none; /* 테두리 제거 */
-    border-radius: 5px; /* 모서리 둥글게 */
+    border-radius: 10px; /* 모서리 둥글게 */
     cursor: pointer; /* 마우스 포인터 변경 */
     transition: background-color 0.3s ease; /* 배경색 전환 효과 */
 }
 
 .board_upload input[type="submit"]:hover {
-    background-color: #3a5a8c; /* 호버 시 배경색 */
+         background-color: rgb(164, 199, 255);
 }
-.board_upload  button {
-    background-color: #4CAF50; /* 버튼 배경색 */
-    color: white; /* 글자 색상 */
-    border: none; /* 테두리 제거 */
-    padding: 10px 20px; /* 여백 */
-    text-align: center; /* 가운데 정렬 */
-    text-decoration: none; /* 밑줄 제거 */
-    display: inline-block; /* 블록 요소로 설정 */
-    font-size: 16px; /* 글자 크기 */
-    margin: 4px 2px; /* 버튼 간격 */
-    cursor: pointer; /* 커서 모양 변경 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    transition: background-color 0.3s; /* 배경색 전환 효과 */
-}
+
 
 /* 버튼에 마우스를 올렸을 때 색상 변경 */
 .board_upload  button:hover {
@@ -618,34 +804,36 @@ footer {
      margin-right: 70px;
 }
 .main-container {
-    width: 70%;
+    width: 80%;
     margin: 0 auto;
-    margin-left: 250px;
     padding: 20px;
-    background-color: #f9f9f9; /* 연한 배경색 */
     border-radius: 8px; /* 모서리 둥글게 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+      border-left:none;
+        border-right:none;
 }
 
 .main-container table {
     width: 100%;
     border-collapse: collapse; /* 테이블 경계 겹침 제거 */
+  border-left:none;
+    border-right:none;
+
+
 }
 
 .main-container th,
 .main-container td {
     padding: 12px;
-    text-align: left;
+    text-align: center; /* 테이블 글자 중앙 정렬 */
     border: 1px solid #ddd; /* 테두리 색상 */
+     border-left:none;
+      border-right:none;
 }
 
 .main-container th {
-    background-color: #4a6fa5; /* 헤더 배경색 */
-    color: white; /* 헤더 텍스트 색상 */
-}
-
-.main-container tr:nth-child(even) {
-    background-color: #f2f2f2; /* 짝수 줄 배경색 */
+     background-color: rgb(164, 199, 255);
+    color: black; /* 헤더 텍스트 색상 */
 }
 
 .main-container tr:hover {
@@ -660,6 +848,7 @@ footer {
 .main-container a:hover {
     text-decoration: underline; /* 링크에 마우스 오버 시 아래선 추가 */
 }
+
 .mem_modify_proc {
     width: 50%; /* 가로 너비를 50%로 설정 */
     margin: 40px auto; /* 위쪽 여백 40px, 좌우 자동으로 중앙 정렬 */
@@ -756,3 +945,508 @@ footer {
         width: 90%; /* 작은 화면에서는 폼의 너비를 줄임 */
     }
 }
+/* 기본 스타일 설정 */
+
+
+/* 책 상세 정보 컨테이너 */
+.book-detail-container {
+    max-width: 1400px; /* 최대 너비 설정 */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-left:auto;
+        margin-right:auto;
+
+
+}
+
+/* 책 이미지 스타일 */
+.book-detail-container .book-image {
+    display: block;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+/* 책 정보 스타일 */
+.book-detail-container .book-info {
+    margin-bottom: 20px;
+    text-align: center; /* 책 정보 중앙 정렬 */
+}
+
+.book-detail-container .book-info h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    color: #007bff;
+}
+
+.book-detail-container .book-info p {
+    margin: 5px 0;
+}
+
+/* 리뷰 목록 스타일 */
+.reviews {
+    margin-top: 30px;
+}
+
+.reviews h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center; /* 리뷰 제목 중앙 정렬 */
+}
+
+.reviews ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* 리뷰 아이템 중앙 정렬을 위한 스타일 */
+.reviews li {
+    margin: 15px auto; /* 중앙 정렬을 위한 자동 마진 */
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    max-width: 600px; /* 최대 너비 설정 */
+}
+
+/* 리뷰 작성 폼 스타일 */
+.add_review {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    text-align: center; /* 중앙 정렬 */
+}
+
+.add_review h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #333;
+}
+
+.add_review textarea {
+    width: 100%; /* 부모 요소의 너비를 기준으로 설정 */
+    max-width: 500px; /* 최대 너비 설정 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical; /* 세로 방향으로만 크기 조절 가능 */
+    margin: 0 auto; /* 중앙 정렬을 위한 자동 마진 */
+}
+
+.add_review button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.add_review button:hover {
+    background-color: #0056b3;
+}
+
+/* 뒤로 가기 링크 스타일 (추가할 경우) */
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    text-decoration: none;
+    background-color: #6c757d;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.back-link:hover {
+    background-color: #5a6268;
+}
+
+
+/*보드*/
+/* 게시글 작성 섹션 */
+.board_upload {
+  width: 80vw; /* 뷰포트 너비의 80% */
+  max-width: 700px; /* 최대 너비 설정 */
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+.board_upload h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 게시글 작성 테이블 */
+.board_upload table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.board_upload table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+
+
+
+
+
+/* 게시글 목록 섹션 */
+.board_list {
+  width: 60%;
+  margin: 50px auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.board_list h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 게시글 목록 테이블 */
+.board_list table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+}
+
+.board_list table th,
+.board_list table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  vertical-align: middle; /* 수직 가운데 정렬 */
+}
+
+.board_list table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+
+/* 게시글 제목 링크 */
+.board_list table td a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.board_list table td a:hover {
+  text-decoration: underline;
+}
+
+/* 삭제 버튼 */
+.board_list button {
+  padding: 5px 10px;
+  background-color: red;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.board_list button:hover {
+     background-color: rgb(164, 199, 255);
+}
+
+/* 전체 컨테이너 */
+.container {
+  max-width: 800px; /* 최대 너비 설정 */
+  width: 50%; /* 전체 너비의 95% */
+  margin: 20px auto; /* 상하 여백과 중앙 배치 */
+  padding: 30px; /* 패딩 설정 */
+  border-radius: 10px; /* 모서리 둥글게 */
+  background-color: #f9f9f9; /* 배경 색상 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+}
+
+/* 게시글 상세 섹션 */
+.board_detail {
+  background-color: #ffffff; /* 흰색 배경 */
+  border: 1px solid #ddd; /* 테두리 색상 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  padding: 20px; /* 패딩 설정 */
+  margin-bottom: 20px; /* 아래쪽 여백 */
+}
+
+/* 테이블 스타일 */
+.board_detail table {
+ margin-left: auto;
+ margin-right: auto;
+  width: 70%; /* 테이블 너비 100% */
+  border-collapse: collapse; /* 경계선 합치기 */
+  border: 1px solid #ddd; /* 테이블 전체 경계선 추가 */
+}
+
+/* 테이블 셀 스타일 */
+.board_detail table td {
+  padding: 12px; /* 패딩 설정 */
+  border: 1px solid #e0e0e0; /* 테이블 셀에 아래쪽 경계선 추가 */
+  color: #555; /* 글자 색상 */
+}
+
+/* 제목, 작성자 및 등록일, 조회수 강조 */
+.board_detail table tr td strong {
+  color: #1a73e8; /* 강조 색상 */
+  font-weight: bold; /* 글자 굵게 */
+}
+
+/* 내용 부분 스타일 */
+.content {
+  height: 300px; /* 내용 부분 높이 */
+  overflow-y: auto; /* 내용이 길 경우 스크롤 */
+  padding: 10px; /* 패딩 설정 */
+  border-radius: 4px; /* 모서리 둥글게 */
+  margin-top: 10px; /* 상단 여백 */
+}
+
+/* 버튼 스타일 */
+.board_actions {
+  display: flex; /* 플렉스 박스 설정 */
+  justify-content: right; /* 중앙 정렬 */
+  margin-right:250px;
+   margin-bottom: 20px; /* 상단 여백 */
+}
+
+.board_actions div {
+  margin-right: 15px; /* 버튼 사이의 여백을 늘려서 오른쪽으로 밀기 */
+}
+
+.board_actions button {
+  padding: 8px 16px; /* 버튼 패딩을 줄여서 크기 작게 */
+     background-color: rgb(164, 199, 255);
+  color: black; /* 글자 색상 */
+  border: none; /* 테두리 없음 */
+  border-radius: 3px; /* 모서리 둥글게를 약간 줄임 */
+  cursor: pointer; /* 커서 손 모양 */
+  transition: background-color 0.3s ease; /* 호버 효과 */
+  font-size: 0.9em; /* 글자 크기를 약간 줄임 */
+}
+
+/* 버튼 호버 시 색상 변화 */
+.board_actions button:hover {
+  background-color: #0c5ac1; /* 호버 시 색상 변화 */
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    align-items: flex-start; /* 왼쪽 정렬 */
+    margin: 20px 0; /* 위아래 여백 추가 */
+}
+
+.navigation .link {
+    text-decoration: none; /* 링크 장식 제거 */
+    color: #007bff; /* 링크 색상 */
+    margin-bottom: 5px; /* 링크 간격 추가 */
+}
+
+.navigation span {
+    margin-left: 20px; /* 텍스트와 링크 사이 여백 추가 */
+    font-style: italic; /* 텍스트 기울임 */
+    margin-top: 5px; /* 제목과 날짜 사이 간격 추가 */
+}
+
+
+.horizontal-line {
+    border-top: 1px solid #ccc; /* 수평선 스타일 */
+    margin: 10px 0; /* 수평선 위아래 여백 */
+    width: 100%; /* 수평선의 폭을 100%로 설정 */
+}
+
+.navigation > div {
+    width: 100%; /* 각 div의 폭을 100%로 설정 */
+}
+
+
+/* 댓글 목록 스타일 */
+.comments {
+  background-color: #ffffff;
+  padding: 15px; /* 패딩 줄임 */
+  border: 1px solid #ddd;
+  margin-bottom: 20px; /* 여백 줄임 */
+    width:800px
+    margin: 20px auto; /* 상하 여백과 중앙 배치 */
+}
+
+.comments h3 {
+  font-size: 1.2em; /* 글자 크기 줄임 */
+  color: #1a73e8;
+  margin-bottom: 10px;
+}
+
+.comments ul {
+  list-style: none;
+  padding: 0;
+}
+
+.comments li {
+  padding: 10px; /* 패딩 줄임 */
+  margin-bottom: 5px; /* 여백 줄임 */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+.comments li p {
+  margin: 5px 0;
+  color: #333;
+  font-size: 0.85em; /* 글자 크기 줄임 */
+}
+
+.comments li p strong {
+  color: #1a73e8;
+}
+
+.comments li p span {
+  color: #777;
+  font-size: 0.75em; /* 글자 크기 줄임 */
+}
+
+.comments button {
+ background-color: rgb(164, 199, 255);
+  color: black;
+  border: none;
+  padding: 3px 8px; /* 버튼 크기 줄임 */
+  font-size: 0.75em; /* 글자 크기 줄임 */
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.comments button:hover {
+  background-color: #c23630;
+}
+
+/* 댓글 작성 폼 스타일 */
+.add_comment {
+  background-color: #ffffff;
+  padding: 15px; /* 패딩 줄임 */
+  border: 1px solid #ddd;
+
+  width:800px
+  margin: 20px auto; /* 상하 여백과 중앙 배치 */
+}
+
+.add_comment h3 {
+  font-size: 1.2em; /* 글자 크기 줄임 */
+  color: #1a73e8;
+  margin-bottom: 10px;
+}
+
+.add_comment textarea {
+  width: 100%;
+  padding: 8px; /* 패딩 줄임 */
+  font-size: 0.9em; /* 글자 크기 줄임 */
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.add_comment button {
+ background-color: rgb(164, 199, 255);
+  color: black;
+  padding: 6px 12px; /* 버튼 크기 줄임 */
+  border: none;
+  font-size: 0.85em; /* 글자 크기 줄임 */
+  cursor: pointer;
+}
+
+.add_comment button:hover {
+  background-color: #0c5ac1;
+}
+
+
+.home_div3 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-five, .bottom-five {
+  width: 45%; /* Adjust the width as needed */
+}
+
+h4 {
+  margin-top: 20px; /* Space above the section titles */
+}
+
+
+.book_modify {
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book_modify label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.book_modify input[type="text"],
+.book_modify textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.book_modify textarea {
+    resize: vertical;
+}
+
+.book_modify button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.book_modify button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.book_modify button[type="button"] {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.book_modify button[type="button"]:hover {
+    background-color: #e53935;
+}
+
+
+
+

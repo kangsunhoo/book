@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>회원 목록</title>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
   <style>
     .active {
         font-weight: bold;
@@ -15,12 +16,12 @@
 </head>
 <body>
 <div th:replace="hnf/header :: header"></div>
-<div th:replace="hnf/aside :: aside"></div>
+<div th:replace="hnf/nav :: nav"></div>
 <div class="main-container">
 
   <!-- 회원 목록 테이블 -->
   <table border="1">
-    <tr>
+    <tr style="text-align: center;">
       <th>번호</th>
       <th>아이디</th>
       <th>이름</th>
@@ -35,8 +36,9 @@
       <th>역할</th>
       <th>삭제</th>
     </tr>
-    <tr th:each="member: ${all}">
-      <td th:text="${member.idx}"></td>
+    <tr th:each="member, index : ${all}">
+      <!-- 역순 번호: 전체 개수에서 현재 인덱스를 빼고 1을 더해 최신 번호 부여 -->
+      <td th:text="${all.totalElements - (currentPage * all.size) - index.count+1}"></td>
       <td><a th:href="@{/modify(idx=${member.idx})}" th:text="${member.userid}"></a></td>
       <td th:text="${member.name}"></td>
       <td th:text="${member.nickname}"></td>
@@ -49,8 +51,9 @@
       <td th:text="${member.regdate}"></td>
       <td th:text="${member.role}"></td>
       <td><a th:href="@{/del(idx=${member.idx})}" th:text="삭제"></a></td>
-
     </tr>
+
+
   </table>
 
 
