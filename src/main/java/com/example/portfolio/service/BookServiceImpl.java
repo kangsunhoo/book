@@ -8,6 +8,7 @@ import com.example.portfolio.entity.MemberEntity;
 import com.example.portfolio.repository.BookMarkRepository;
 import com.example.portfolio.repository.BookRepository;
 import jakarta.persistence.EntityNotFoundException;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,16 +87,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public void saveBook(BookDTO bookDTO, MultipartFile sbookFile) {
         BookEntity bookEntity = new BookEntity(); // 새로운 BookEntity 생성
+        String uploadDir = "src/main/resources/static/uploads/"; // 파일 저장 디렉토리 설정
         String uniqueFileName = UUID.randomUUID().toString() + "_" + sbookFile.getOriginalFilename(); // 파일 이름 생성
-        String filePath = "src/main/resources/static/uploads/"; // 파일 저장 경로
-        String thumbnailPath = "src/main/resources/static/uploads/thumbnails/"; // 썸네일 파일 저장 경로
 
         try {
-            // 이미지 파일 저장
-            Files.copy(sbookFile.getInputStream(), Paths.get(filePath + uniqueFileName), StandardCopyOption.REPLACE_EXISTING);
+            // 파일 저장
+            Files.copy(sbookFile.getInputStream(), Paths.get(uploadDir + uniqueFileName), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // 오류 출력
         }
+
         bookEntity.setSbookFile(sbookFile.getOriginalFilename()); // 원본 파일명 저장
         bookEntity.setObookFile(uniqueFileName); // 서버에 저장할 파일명 저장
 
@@ -113,6 +116,7 @@ public class BookServiceImpl implements BookService {
         // BookEntity 저장
         bookRepository.save(bookEntity);
     }
+
 
 
 
